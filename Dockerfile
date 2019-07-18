@@ -11,6 +11,7 @@ RUN go mod download
 COPY . ./
 RUN go build -o /bin/flog
 
-FROM scratch
+FROM alpine:3.10.1
 COPY --from=0 /bin/flog /bin/flog
-ENTRYPOINT ["flog"]
+RUN mkdir -p /var/log/apache2
+ENTRYPOINT ["flog", "-t", "log", "-d", "1", "-w", "-o", "/var/log/apache2/access.log"]
